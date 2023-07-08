@@ -1,0 +1,39 @@
+{
+  "name": "rollup-swc-preserve-directives",
+  "version": "0.0.0",
+  "description": "Rollup plugin to preserve directives with SWC",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/es/index.js",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/es/index.js",
+    "default": "./dist/cjs/index.js"
+  },
+  "files": [
+    "dist",
+    "*.md"
+  ],
+  "scripts": {
+    "build": "bunchee",
+    "prepublishOnly": "rm -rf dist && pnpm run build"
+  },
+  "keywords": [],
+  "author": "huozhi",
+  "license": "MIT",
+  "peerDependencies": {
+    "@swc/core": ">=1.2.165",
+    "rollup": "^3.0.0"
+  },
+  "dependencies": {
+    "@napi-rs/magic-string": "^0.3.4"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.3.68",
+    "@swc/helpers": "^0.5.1",
+    "@types/node": "^20.4.1",
+    "bunchee": "^3.5.1",
+    "rollup": "^3.26.2",
+    "typescript": "^5.1.6"
+  }
+}
