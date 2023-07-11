@@ -3,17 +3,21 @@ import { extname } from 'path'
 import { parse } from '@swc/core'
 import { MagicString } from '@napi-rs/magic-string'
 
+import type { ParseOptions } from '@swc/core';
+
 const availableESExtensionsRegex = /\.(m|c)?(j|t)sx?$/
 const tsExtensionsRegex = /\.(m|c)?ts$/
 const directiveRegex = /^use (\w+)$/
 
+interface PreserveDirectiveMeta {
+  shebang: string | null,
+  directives: Record<string, Set<string>>
+}
+
 export default function swcPreserveDirectivePlugin(): Plugin {
-  const meta: {
-    shebang: string | null
-    directives: Set<string>
-  } = {
+  const meta: PreserveDirectiveMeta = {
     shebang: null,
-    directives: new Set(),
+    directives: {},
   }
 
   return {
@@ -23,7 +27,7 @@ export default function swcPreserveDirectivePlugin(): Plugin {
       if (!availableESExtensionsRegex.test(ext)) return code
 
       const isTypescript = tsExtensionsRegex.test(ext)
-      const parseOptions = {
+      const parseOptions: ParseOptions = {
         syntax: isTypescript ? 'typescript' : 'ecmascript',
         [isTypescript ? 'tsx' : 'jsx']: true,
         privateMethod: true,
@@ -41,7 +45,8 @@ export default function swcPreserveDirectivePlugin(): Plugin {
       for (const node of body) {
         if (node.type === 'ExpressionStatement') {
           if (node.expression.type === 'StringLiteral' && directiveRegex.test(node.expression.value)) {
-            meta.directives.add(node.expression.value)
+            meta.directives[id] ||= new Set<string>();
+            meta.directives[id].add(node.expression.value);
           }
         } else {
           // Only parse the top level directives, once reached to the first non statement literal node, stop parsing
@@ -52,16 +57,27 @@ export default function swcPreserveDirectivePlugin(): Plugin {
       return { code, map: null, meta }
     },
 
-    renderChunk(code, _chunk, { sourcemap }) {
-      const { shebang, directives } = meta
-      if (!directives.size && !shebang) return null
+    renderChunk(code, chunk, { sourcemap }) {
+      const outputDirectives = chunk.moduleIds
+        .map((id) => {
+          if (meta.directives[id]) {
+            return meta.directives[id];
+          }
+          return null;
+        })
+        .reduce<Set<string>>((acc, directives) => {
+          if (directives) {
+            directives.forEach((directive) => acc.add(directive));
+          }
+          return acc;
+        }, new Set());
 
       const s = new MagicString(code)
-      if (directives.size) {
-        s.prepend(`${Array.from(directives).map(directive => `'${directive}';`).join('\n')}\n`)
+      if (outputDirectives.size) {
+        s.prepend(`${Array.from(outputDirectives).map(directive => `'${directive}';`).join('\n')}\n`)
       }
-      if (shebang) {
-        s.prepend(`${shebang}\n`)
+      if (meta.shebang) {
+        s.prepend(`${meta.shebang}\n`)
       }
 
       return {

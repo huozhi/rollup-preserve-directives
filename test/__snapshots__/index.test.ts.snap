@@ -17,8 +17,7 @@ export { bar, baz, foo };
 
 exports[`preserve-directive (rollup 3) should output separate directive for multiple output chunk 1`] = `
 {
-  "client": "'use server';
-'use client';
+  "client": "'use client';
 'use sukka';
 import { useState } from 'react';
 
@@ -32,8 +31,6 @@ const ClientComponent = ()=>{
 export { ClientComponent, foo };
 ",
   "server": "'use server';
-'use client';
-'use sukka';
 import { readFile } from 'fs/promises';
 
 const ServerComponent = async ()=>{
