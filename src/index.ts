@@ -36,7 +36,21 @@ export default function swcPreserveDirectivePlugin(): Plugin {
         script: false, target: 'es2019'
       } as const
 
-      const { body, interpreter } = await parse(code, parseOptions)
+      let magicString: MagicString | null = null
+
+      /**
+       * @swc/core's node span doesn't start with 0
+       * Although the behavior is not intended, the swc team won't fix it since swc.parse
+       * will be deprecated in the future anyway.
+       *
+       * See https://github.com/swc-project/swc/issues/1366
+       *
+       * For now, let's just use the `Module.span.start` as the offset to fix the span
+       *
+       * FIXME: migrate to rollup built-in acorn based parser (this.parse)
+       */
+      const { body, interpreter, span: { start: offset } } = await parse(code, parseOptions)
+
       if (interpreter) {
         meta.shebang = `#!${interpreter}`
         code = code.replace(new RegExp('^[\\s\\n]*' + meta.shebang.replace(/\//g, '\/') + '\\n*'), '') // Remove shebang from code
@@ -47,6 +61,9 @@ export default function swcPreserveDirectivePlugin(): Plugin {
           if (node.expression.type === 'StringLiteral' && directiveRegex.test(node.expression.value)) {
             meta.directives[id] ||= new Set<string>();
             meta.directives[id].add(node.expression.value);
+
+            magicString ||= new MagicString(code)
+            magicString.remove(node.span.start - offset, node.span.end - offset)
           }
         } else {
           // Only parse the top level directives, once reached to the first non statement literal node, stop parsing
@@ -54,7 +71,10 @@ export default function swcPreserveDirectivePlugin(): Plugin {
         }
       }
 
-      return { code, map: null, meta }
+      return {
+        code: magicString ? magicString.toString() : code,
+        map: magicString ? magicString.generateMap({ hires: true }).toMap() : null
+      }
     },
 
     renderChunk(code, chunk, { sourcemap }) {
@@ -72,17 +92,20 @@ export default function swcPreserveDirectivePlugin(): Plugin {
           return acc;
         }, new Set());
 
-      const s = new MagicString(code)
+      let magicString: MagicString | null = null
+
       if (outputDirectives.size) {
-        s.prepend(`${Array.from(outputDirectives).map(directive => `'${directive}';`).join('\n')}\n`)
+        magicString ||= new MagicString(code)
+        magicString.prepend(`${Array.from(outputDirectives).map(directive => `'${directive}';`).join('\n')}\n`)
       }
       if (meta.shebang) {
-        s.prepend(`${meta.shebang}\n`)
+        magicString ||= new MagicString(code)
+        magicString.prepend(`${meta.shebang}\n`)
       }
 
       return {
-        code: s.toString(),
-        map: sourcemap ? s.generateMap({ hires: true }).toMap() : null
+        code: magicString ? magicString.toString() : code,
+        map: (sourcemap && magicString) ? magicString.generateMap({ hires: true }).toMap() : null
       }
     }
   }
