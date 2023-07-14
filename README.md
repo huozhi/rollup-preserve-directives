@@ -3,11 +3,16 @@
 This is a rollup plugin that uses SWC to help preserve shebang and string directives.
 
 ## Install
+
 ```bash
 npm install rollup-swc-preserve-directives
+
+# You also need to install @swc/core as peer dependency
+npm install @swc/core
 ```
 
 ## Usage
+
 ```js
 import swcPreserveDirectives from 'rollup-swc-preserve-directives';
 

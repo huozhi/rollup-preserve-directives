@@ -20,7 +20,7 @@
     "test": "jest --env node",
     "test:update": "jest --env node --updateSnapshot"
   },
-  "keywords": [],
+  "keywords": ["rollup", "plugin", "swc", "preserve", "directives"],
   "author": "huozhi",
   "license": "MIT",
   "peerDependencies": {
