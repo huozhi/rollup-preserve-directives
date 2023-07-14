@@ -1,6 +1,6 @@
 {
   "name": "rollup-swc-preserve-directives",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Rollup plugin to preserve directives with SWC",
   "types": "./dist/index.d.ts",
   "main": "./dist/cjs/index.js",
@@ -20,7 +20,13 @@
     "test": "jest --env node",
     "test:update": "jest --env node --updateSnapshot"
   },
-  "keywords": ["rollup", "plugin", "swc", "preserve", "directives"],
+  "keywords": [
+    "rollup",
+    "plugin",
+    "swc",
+    "preserve",
+    "directives"
+  ],
   "author": "huozhi",
   "license": "MIT",
   "peerDependencies": {
