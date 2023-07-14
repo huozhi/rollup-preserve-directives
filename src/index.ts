@@ -40,14 +40,7 @@ export default function swcPreserveDirectivePlugin(): Plugin {
 
       /**
        * @swc/core's node span doesn't start with 0
-       * Although the behavior is not intended, the swc team won't fix it since swc.parse
-       * will be deprecated in the future anyway.
-       *
-       * See https://github.com/swc-project/swc/issues/1366
-       *
-       * For now, let's just use the `Module.span.start` as the offset to fix the span
-       *
-       * FIXME: migrate to rollup built-in acorn based parser (this.parse)
+       * https://github.com/swc-project/swc/issues/1366
        */
       const { body, interpreter, span: { start: offset } } = await parse(code, parseOptions)
 
