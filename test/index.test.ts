@@ -47,5 +47,3 @@ describe('preserve-directive (rollup 2)', () => {
   // @ts-expect-error -- rollup 2 type is imcompatible w/ rollup 3
   tests(rollup2);
 });
-
-// TODO: add test case for rollup 2
