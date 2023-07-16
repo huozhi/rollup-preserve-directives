@@ -1,4 +1,4 @@
-import type { Plugin } from 'rollup'
+import type { Plugin, RenderedChunk } from 'rollup'
 import { extname } from 'path'
 import { parse } from '@swc/core'
 import { MagicString } from '@napi-rs/magic-string'
@@ -71,7 +71,15 @@ export default function swcPreserveDirectivePlugin(): Plugin {
     },
 
     renderChunk(code, chunk, { sourcemap }) {
-      const outputDirectives = chunk.moduleIds
+      /**
+       * chunk.moduleIds is introduced in rollup 3
+       * Add a fallback for rollup 2
+       */
+      const moduleIds = 'moduleIds' in chunk
+        ? chunk.moduleIds
+        : Object.keys((chunk as RenderedChunk).modules)
+
+      const outputDirectives = moduleIds
         .map((id) => {
           if (meta.directives[id]) {
             return meta.directives[id];

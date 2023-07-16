@@ -1,7 +1,8 @@
 import { tester } from './testing-utils';
-import { rollup } from 'rollup';
+import { rollup as rollup3 } from 'rollup';
+import { rollup as rollup2 } from 'rollup2';
 
-const tests = (rollupImpl: typeof rollup) => {
+const tests = (rollupImpl: typeof rollup3) => {
   it('should preserve shebang', async () => {
     const output = await tester(rollupImpl, {
       input: 'shebang/index.ts'
@@ -39,7 +40,10 @@ const tests = (rollupImpl: typeof rollup) => {
 }
 
 describe('preserve-directive (rollup 3)', () => {
-  tests(rollup);
+  tests(rollup3);
 });
 
-// TODO: add test case for rollup 2
+describe('preserve-directive (rollup 2)', () => {
+  // @ts-expect-error -- rollup 2 type is imcompatible w/ rollup 3
+  tests(rollup2);
+});
