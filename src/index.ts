@@ -14,7 +14,7 @@ interface PreserveDirectiveMeta {
   directives: Record<string, Set<string>>
 }
 
-export default function swcPreserveDirectivePlugin(): Plugin {
+export function swcPreserveDirective(): Plugin {
   const meta: PreserveDirectiveMeta = {
     shebang: null,
     directives: {},
@@ -103,3 +103,5 @@ export default function swcPreserveDirectivePlugin(): Plugin {
     }
   }
 }
+
+export default swcPreserveDirective
