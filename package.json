@@ -1,6 +1,6 @@
 {
   "name": "rollup-swc-preserve-directives",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Rollup plugin to preserve directives with SWC",
   "types": "./dist/index.d.ts",
   "main": "./dist/cjs/index.js",
