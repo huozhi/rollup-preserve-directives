@@ -6,7 +6,7 @@ import { MagicString } from '@napi-rs/magic-string'
 import type { ParseOptions } from '@swc/core';
 
 const availableESExtensionsRegex = /\.(m|c)?(j|t)sx?$/
-const tsExtensionsRegex = /\.(m|c)?ts$/
+const tsExtensionsRegex = /\.(m|c)?tsx?$/
 const directiveRegex = /^use (\w+)$/
 
 interface PreserveDirectiveMeta {
