@@ -37,6 +37,14 @@ const tests = (rollupImpl: typeof rollup3) => {
 
     expect(output).toMatchSnapshot();
   });
+
+  it('issue #9', async () => {
+    const output = await tester(rollupImpl, {
+      input: 'prop-types/index.js'
+    });
+
+    expect(output).toMatchSnapshot();
+  });
 }
 
 describe('preserve-directive (rollup 3)', () => {
