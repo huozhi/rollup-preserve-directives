@@ -30,7 +30,6 @@
   "author": "huozhi",
   "license": "MIT",
   "peerDependencies": {
-    "@swc/core": ">=1.2.165",
     "rollup": "^2.0.0 || ^3.0.0"
   },
   "dependencies": {
