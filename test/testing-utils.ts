@@ -38,7 +38,7 @@ export const tester = async (
         return acc;
       }, {});
     })(),
-    plugins: [swc(), preserveDirective()] as any,
+    plugins: [preserveDirective(), swc()] as any, // rollup 2 & rollup 3 type is incompatible
     external
   });
 

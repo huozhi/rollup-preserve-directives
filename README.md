@@ -1,14 +1,11 @@
 # rollup-swc-preserve-directives
 
-This is a rollup plugin that uses SWC to help preserve shebang and string directives.
+A rollup plugin helps preserving shebang and string directives in your code.
 
 ## Install
 
 ```bash
 npm install rollup-swc-preserve-directives
-
-# You also need to install @swc/core as peer dependency
-npm install @swc/core
 ```
 
 ## Usage
