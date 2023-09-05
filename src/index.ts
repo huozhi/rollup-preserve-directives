@@ -1,27 +1,18 @@
 import type { Plugin, RenderedChunk } from 'rollup'
 import { extname } from 'path'
+import { parse } from '@swc/core'
 import { MagicString } from '@napi-rs/magic-string'
 
-import type { Options as AcornParseOptions } from 'acorn';
-import type { Node as ESTreeNode } from 'estree';
+import type { ParseOptions } from '@swc/core';
 
 const availableESExtensionsRegex = /\.(m|c)?(j|t)sx?$/
+const tsExtensionsRegex = /\.(m|c)?tsx?$/
 const directiveRegex = /^use (\w+)$/
 
 interface PreserveDirectiveMeta {
   shebang: string | null,
   directives: Record<string, Set<string>>
 }
-
-const parseOptions: AcornParseOptions = {
-  ecmaVersion: 'latest',
-  sourceType: 'module',
-  // Use `allowHashBang: true` to prevent acorn from choking on shebangs
-  allowHashBang: true,
-  ranges: true,
-  allowImportExportEverywhere: true,
-  allowAwaitOutsideFunction: true
-} as const
 
 function swcPreserveDirective(): Plugin {
   const meta: PreserveDirectiveMeta = {
@@ -31,110 +22,51 @@ function swcPreserveDirective(): Plugin {
 
   return {
     name: 'swc-render-directive',
-    transform: {
-      order: 'post',
-      handler(code, id) {
-        const ext = extname(id)
-        if (!availableESExtensionsRegex.test(ext)) return null
+    async transform(code, id) {
+      const ext = extname(id)
+      if (!availableESExtensionsRegex.test(ext)) return code
 
-        let magicString: MagicString | null = null
+      const isTypescript = tsExtensionsRegex.test(ext)
+      const parseOptions: ParseOptions = {
+        syntax: isTypescript ? 'typescript' : 'ecmascript',
+        [isTypescript ? 'tsx' : 'jsx']: true,
+        privateMethod: true,
+        classPrivateProperty: true,
+        exportDefaultFrom: true,
+        script: false, target: 'es2019'
+      } as const
 
-        /**
-         * Here we are making 3 assumptions:
-         * - shebang can only be at the first line of the file, otherwise it will not be recognized
-         * - shebang can only contains one line
-         * - shebang must starts with # and !
-         *
-         * Those assumptions are also made by acorn, babel and swc:
-         *
-         * - acorn: https://github.com/acornjs/acorn/blob/8da1fdd1918c9a9a5748501017262ce18bb2f2cc/acorn/src/state.js#L78
-         * - babel: https://github.com/babel/babel/blob/86fee43f499c76388cab495c8dcc4e821174d4e0/packages/babel-parser/src/tokenizer/index.ts#L574
-         * - swc: https://github.com/swc-project/swc/blob/7bf4ab39b0e49759d9f5c8d7f989b3ed010d81a7/crates/swc_ecma_parser/src/lexer/mod.rs#L204
-         */
-        if (code[0] === '#' && code[1] === '!') {
-          let firstNewLineIndex = 0;
+      let magicString: MagicString | null = null
 
-          for (let i = 2, len = code.length; i < len; i++) {
-            const charCode = code.charCodeAt(i);
-            if (charCode === 10 || charCode === 13 || charCode === 0x2028 || charCode === 0x2029) {
-              firstNewLineIndex = i;
-              break;
-            }
+      /**
+       * @swc/core's node span doesn't start with 0
+       * https://github.com/swc-project/swc/issues/1366
+       */
+      const { body, interpreter } = await parse(code, parseOptions)
+
+      if (interpreter) {
+        meta.shebang = `#!${interpreter}`
+        code = code.replace(new RegExp('^[\\s\\n]*' + meta.shebang.replace(/\//g, '\/') + '\\n*'), '') // Remove shebang from code
+      }
+
+      for (const node of body) {
+        if (node.type === 'ExpressionStatement') {
+          if (node.expression.type === 'StringLiteral' && directiveRegex.test(node.expression.value)) {
+            meta.directives[id] ||= new Set<string>();
+            meta.directives[id].add(node.expression.value);
+
+            magicString ||= new MagicString(code)
           }
-
-          if (firstNewLineIndex) {
-            meta.shebang = code.slice(0, firstNewLineIndex);
-
-            magicString ||= new MagicString(code);
-            magicString.remove(0, firstNewLineIndex + 1);
-          }
+        } else {
+          // Only parse the top level directives, once reached to the first non statement literal node, stop parsing
+          break
         }
+      }
 
-        /**
-         * rollup's built-in parser returns an extended version of ESTree Node.
-         */
-        let ast = null;
-        try {
-          ast = this.parse(code, parseOptions) as ESTreeNode;
-        } catch (e) {
-          console.log(e);
-
-          this.warn({
-            code: 'PARSE_ERROR',
-            message: `[rollup-swc-preserve-directives]: failed to parse "${id}" and extract the directives. make sure you have added "rollup-swc-preserve-directives" to the last of your plugins list, after swc/babel/esbuild/typescript or any other transform plugins.`
-          });
-
-          return null;
-        }
-
-        if (ast.type === 'Program') {
-          for (const node of ast.body) {
-            if (node.type === 'ExpressionStatement') {
-              let directive: string | null = null;
-              /**
-               * rollup and estree defines `directive` field on the `ExpressionStatement` node:
-               * https://github.com/rollup/rollup/blob/fecf0cfe14a9d79bb0eff4ad475174ce72775ead/src/ast/nodes/ExpressionStatement.ts#L10
-               */
-              if ('directive' in node) {
-                directive = node.directive;
-              } else if (node.expression.type === 'Literal' && typeof node.expression.value === 'string' && directiveRegex.test(node.expression.value)) {
-                directive = node.expression.value;
-              }
-
-              if (directive) {
-                meta.directives[id] ||= new Set<string>();
-                meta.directives[id].add(directive);
-
-                magicString ||= new MagicString(code);
-
-                /**
-                 * rollup has extended acorn node with the `start` and the `end` field
-                 * https://github.com/rollup/rollup/blob/fecf0cfe14a9d79bb0eff4ad475174ce72775ead/src/ast/nodes/shared/Node.ts#L33
-                 *
-                 * However, typescript doesn't know that, so we add type guards for typescript
-                 * to infer.
-                 */
-                if (
-                  'start' in node
-                  && typeof node.start === 'number'
-                  && 'end' in node
-                  && typeof node.end === 'number'
-                ) {
-                  magicString.remove(node.start, node.end);
-                }
-              }
-            } else {
-              // Only parse the top level directives, once reached to the first non statement literal node, stop parsing
-              break;
-            }
-          }
-        }
-
-        return {
-          code: magicString ? magicString.toString() : code,
-          map: magicString ? magicString.generateMap({ hires: true }).toMap() : null
-        }
-      },
+      return {
+        code: magicString ? magicString.toString() : code,
+        map: magicString ? magicString.generateMap({ hires: true }).toMap() : null
+      }
     },
 
     renderChunk(code, chunk, { sourcemap }) {
@@ -175,7 +107,14 @@ function swcPreserveDirective(): Plugin {
         code: magicString ? magicString.toString() : code,
         map: (sourcemap && magicString) ? magicString.generateMap({ hires: true }).toMap() : null
       }
-    }
+    },
+
+    onLog(level, log) {
+      if (log.code === 'MODULE_LEVEL_DIRECTIVE' && level === 'warn') {
+        return false
+      }
+      this.warn(log)
+    },
   }
 }
 

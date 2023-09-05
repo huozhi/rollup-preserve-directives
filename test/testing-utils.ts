@@ -12,6 +12,7 @@ interface BuildTestOption {
   sourcemap?: boolean,
   dir?: string,
   external?: ExternalOption
+  version?: number
 }
 
 const DEFAULT_EXTERNAL = ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'].concat(Module.builtinModules);
@@ -22,7 +23,8 @@ export const tester = async (
     input = './fixture/index.js',
     sourcemap = false,
     dir = path.resolve(__dirname, 'fixtures'),
-    external = DEFAULT_EXTERNAL
+    external = DEFAULT_EXTERNAL,
+    version,
   }: BuildTestOption = {}
 ) => {
   const build = await rollupImpl({
@@ -39,7 +41,15 @@ export const tester = async (
       }, {});
     })(),
     plugins: [preserveDirective(), swc()] as any, // rollup 2 & rollup 3 type is incompatible
-    external
+    external,
+    onwarn(warning, warn) {
+      if (version === 2) {
+        if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+          return
+        }
+        warn(warning)
+      }
+    }
   });
 
   const { output } = await build.generate({ format: 'esm', sourcemap });
