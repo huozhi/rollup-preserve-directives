@@ -2,10 +2,11 @@ import { tester } from './testing-utils';
 import { rollup as rollup3 } from 'rollup';
 import { rollup as rollup2 } from 'rollup2';
 
-const tests = (rollupImpl: typeof rollup3) => {
+const runTests = (rollupImpl: typeof rollup3, version: number) => {
   it('should preserve shebang', async () => {
     const output = await tester(rollupImpl, {
-      input: 'shebang/index.ts'
+      input: 'shebang/index.ts',
+      version,
     });
 
     expect(output).toMatchSnapshot();
@@ -48,10 +49,10 @@ const tests = (rollupImpl: typeof rollup3) => {
 }
 
 describe('preserve-directive (rollup 3)', () => {
-  tests(rollup3);
+  runTests(rollup3, 3);
 });
 
 describe('preserve-directive (rollup 2)', () => {
-  // @ts-expect-error -- rollup 2 type is imcompatible w/ rollup 3
-  tests(rollup2);
+  // @ts-expect-error -- rollup 2 type is incompatible w/ rollup 3
+  runTests(rollup2, 2);
 });
