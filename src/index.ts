@@ -113,7 +113,7 @@ function swcPreserveDirective(): Plugin {
       if (log.code === 'MODULE_LEVEL_DIRECTIVE' && level === 'warn') {
         return false
       }
-      this.warn(log)
+      return this.warn(log)
     },
   }
 }
