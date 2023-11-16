@@ -225,3 +225,116 @@ console.log('shebang');
 ",
 }
 `;
+
+exports[`preserve-directive (rollup 4) issue #9 1`] = `
+{
+  "index": "'use strict';
+function emptyFunction() {}
+function emptyFunctionWithReset() {}
+emptyFunctionWithReset.resetWarningCache = emptyFunction;
+module.exports = function() {
+    function shim(props, propName, componentName, location, propFullName, secret) {
+        var err = new Error('Calling PropTypes validators directly is not supported by the \`prop-types\` package. ' + 'Use PropTypes.checkPropTypes() to call them. ' + 'Read more at http://fb.me/use-check-prop-types');
+        err.name = 'Invariant Violation';
+        throw err;
+    }
+    shim.isRequired = shim;
+    function getShim() {
+        return shim;
+    }
+    // Important!
+    // Keep this list in sync with production version in \`./factoryWithTypeCheckers.js\`.
+    var ReactPropTypes = {
+        array: shim,
+        bigint: shim,
+        bool: shim,
+        func: shim,
+        number: shim,
+        object: shim,
+        string: shim,
+        symbol: shim,
+        any: shim,
+        arrayOf: getShim,
+        element: shim,
+        elementType: shim,
+        instanceOf: getShim,
+        node: shim,
+        objectOf: getShim,
+        oneOf: getShim,
+        oneOfType: getShim,
+        shape: getShim,
+        exact: getShim,
+        checkPropTypes: emptyFunctionWithReset,
+        resetWarningCache: emptyFunction
+    };
+    ReactPropTypes.PropTypes = ReactPropTypes;
+    return ReactPropTypes;
+};
+",
+}
+`;
+
+exports[`preserve-directive (rollup 4) should merge duplicated directives 1`] = `
+{
+  "index": "'use client';
+'use sukka';
+const foo = 'foo';
+
+const bar = 'bar';
+
+const baz = 'baz';
+
+export { bar, baz, foo };
+",
+}
+`;
+
+exports[`preserve-directive (rollup 4) should output separate directive for multiple output chunk 1`] = `
+{
+  "client": "'use client';
+'use sukka';
+import { useState } from 'react';
+
+const foo = 'is-client';
+
+const ClientComponent = ()=>{
+    const [count] = useState(0);
+    return /*#__PURE__*/ React.createElement("div", null, "count: ", count);
+};
+
+export { ClientComponent, foo };
+",
+  "server": "'use server';
+import { readFile } from 'fs/promises';
+
+const ServerComponent = async ()=>{
+    const foo = await readFile('__virtual_data/foo.txt', 'utf8');
+    return /*#__PURE__*/ React.createElement("div", null, foo);
+};
+
+export { ServerComponent };
+",
+}
+`;
+
+exports[`preserve-directive (rollup 4) should preserve directives 1`] = `
+{
+  "index": "'use client';
+import { useState } from 'react';
+
+function client() {
+    return useState(null);
+}
+
+export { client as default };
+",
+}
+`;
+
+exports[`preserve-directive (rollup 4) should preserve shebang 1`] = `
+{
+  "index": "#!/usr/bin/env node
+console.log('shebang');
+",
+}
+`;
