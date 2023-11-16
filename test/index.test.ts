@@ -60,6 +60,6 @@ describe('preserve-directive (rollup 3)', () => {
 });
 
 describe('preserve-directive (rollup 4)', () => {
-  // @ts-expect-error -- rollup 2 type is incompatible w/ rollup 3
+  // @ts-expect-error -- rollup 4 type is incompatible w/ rollup 3
   runTests(rollup4, 4);
 });
