@@ -1,6 +1,6 @@
 import path from 'path';
 import { Module } from 'module';
-import { rollup } from 'rollup';
+import type { rollup } from 'rollup';
 
 import { swc } from 'rollup-plugin-swc3';
 import preserveDirective from '../src';
