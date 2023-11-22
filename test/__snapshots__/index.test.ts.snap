@@ -3,6 +3,12 @@
 exports[`preserve-directive (rollup 2) issue #9 1`] = `
 {
   "index": "'use strict';
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */ 
 function emptyFunction() {}
 function emptyFunctionWithReset() {}
 emptyFunctionWithReset.resetWarningCache = emptyFunction;
@@ -116,6 +122,12 @@ console.log('shebang');
 exports[`preserve-directive (rollup 3) issue #9 1`] = `
 {
   "index": "'use strict';
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */ 
 function emptyFunction() {}
 function emptyFunctionWithReset() {}
 emptyFunctionWithReset.resetWarningCache = emptyFunction;
@@ -229,6 +241,12 @@ console.log('shebang');
 exports[`preserve-directive (rollup 4) issue #9 1`] = `
 {
   "index": "'use strict';
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */ 
 function emptyFunction() {}
 function emptyFunctionWithReset() {}
 emptyFunctionWithReset.resetWarningCache = emptyFunction;

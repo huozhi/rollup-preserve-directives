@@ -6,9 +6,6 @@ A rollup plugin helps preserving shebang and string directives in your code.
 
 ```bash
 npm install rollup-swc-preserve-directives
-
-# You also need to install @swc/core as peer dependency
-npm install @swc/core
 ```
 
 ## Usage
