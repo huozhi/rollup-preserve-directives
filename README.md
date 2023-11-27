@@ -1,17 +1,17 @@
-# rollup-swc-preserve-directives
+# rollup-preserve-directives
 
 A rollup plugin helps preserving shebang and string directives in your code.
 
 ## Install
 
 ```bash
-npm install rollup-swc-preserve-directives
+npm install rollup-preserve-directives
 ```
 
 ## Usage
 
 ```js
-import swcPreserveDirectives from 'rollup-swc-preserve-directives';
+import preserveDirectives from 'rollup-preserve-directives';
 
 export default {
   input: './src/index.js',
@@ -20,7 +20,7 @@ export default {
     format: 'cjs'
   },
   plugins: [
-    swcPreserveDirectives()
+    preserveDirectives()
   ]
 }
 ```
