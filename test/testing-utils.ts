@@ -39,7 +39,7 @@ export const tester = async (
         acc[key] = path.resolve(dir, value);
         return acc;
       }, {});
-    })(),
+    })() as any,
     plugins: [preserveDirective(), swc()] as any, // rollup 2 & rollup 3 type is incompatible
     external,
     onwarn(warning, warn) {

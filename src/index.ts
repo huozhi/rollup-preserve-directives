@@ -1,8 +1,7 @@
 import type { Plugin, RenderedChunk } from 'rollup'
+import type { Node } from 'estree'
 import { extname } from 'path'
 import { MagicString } from '@napi-rs/magic-string'
-
-import type { Node } from 'estree';
 
 const availableESExtensionsRegex = /\.(m|c)?(j|t)sx?$/
 const directiveRegex = /^use (\w+)$/
@@ -12,14 +11,14 @@ interface PreserveDirectiveMeta {
   directives: Record<string, Set<string>>
 }
 
-function swcPreserveDirective(): Plugin {
+function preserveDirective(): Plugin {
   const meta: PreserveDirectiveMeta = {
     shebang: null,
     directives: {},
   }
 
   return {
-    name: 'swc-render-directive',
+    name: 'preserve-directives',
     transform: {
       order: 'post',
       handler(code, id) {
@@ -177,5 +176,5 @@ function swcPreserveDirective(): Plugin {
   }
 }
 
-export default swcPreserveDirective;
-export { swcPreserveDirective as preserveDirective };
+export default preserveDirective;
+export { preserveDirective };
