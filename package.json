@@ -1,6 +1,6 @@
 {
   "name": "rollup-preserve-directives",
-  "version": "0.7.0",
+  "version": "1.0.0",
   "description": "Rollup plugin to preserve directives",
   "types": "./dist/index.d.ts",
   "main": "./dist/cjs/index.js",
