@@ -1,7 +1,7 @@
 import type { Plugin, RenderedChunk } from 'rollup'
 import type { Node } from 'estree'
 import { extname } from 'path'
-import { MagicString } from '@napi-rs/magic-string'
+import MagicString from 'magic-string'
 
 const availableESExtensionsRegex = /\.(m|c)?(j|t)sx?$/
 const directiveRegex = /^use (\w+)$/
@@ -122,7 +122,7 @@ function preserveDirective(): Plugin {
 
         return {
           code: magicString ? magicString.toString() : code,
-          map: magicString ? magicString.generateMap({ hires: true }).toMap() : null
+          map: magicString ? magicString.generateMap({ hires: true }) : null
         }
       }
     },
@@ -163,7 +163,7 @@ function preserveDirective(): Plugin {
 
       return {
         code: magicString ? magicString.toString() : code,
-        map: (sourcemap && magicString) ? magicString.generateMap({ hires: true }).toMap() : null
+        map: (sourcemap && magicString) ? magicString.generateMap({ hires: true }) : null
       }
     },
 

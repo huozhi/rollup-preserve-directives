@@ -3,6 +3,8 @@ import { rollup as rollup3 } from 'rollup';
 import { rollup as rollup2 } from 'rollup2';
 import { rollup as rollup4 } from 'rollup4';
 
+import rollupPluginCommonjs from '@rollup/plugin-commonjs';
+
 const runTests = (rollupImpl: typeof rollup3, version: number) => {
   it('should preserve shebang', async () => {
     const output = await tester(rollupImpl, {
@@ -43,6 +45,15 @@ const runTests = (rollupImpl: typeof rollup3, version: number) => {
   it('issue #9', async () => {
     const output = await tester(rollupImpl, {
       input: 'prop-types/index.js'
+    });
+
+    expect(output).toMatchSnapshot();
+  });
+
+  it('fix string constant introduced by rollup commonjs', async () => {
+    const output = await tester(rollupImpl, {
+      input: 'commonjs-virtual-modules/index.js',
+      otherPlugins: [rollupPluginCommonjs()]
     });
 
     expect(output).toMatchSnapshot();
