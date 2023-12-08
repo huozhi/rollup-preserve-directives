@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@napi-rs/magic-string': ^0.3.4
+  '@rollup/plugin-commonjs': ^25.0.7
   '@swc/core': ^1.3.96
   '@swc/helpers': ^0.5.1
   '@swc/jest': ^0.2.26
@@ -11,6 +11,7 @@ specifiers:
   acorn: ^8.10.0
   bunchee: ^3.6.1
   jest: ^29.6.1
+  magic-string: ^0.30.5
   rollup: ^3.28.1
   rollup-plugin-swc3: ^0.9.0
   rollup2: npm:rollup@^2.79.1
@@ -18,9 +19,10 @@ specifiers:
   typescript: ^5.1.6
 
 dependencies:
-  '@napi-rs/magic-string': 0.3.4
+  magic-string: 0.30.5
 
 devDependencies:
+  '@rollup/plugin-commonjs': 25.0.7_rollup@3.28.1
   '@swc/core': 1.3.96_@swc+helpers@0.5.1
   '@swc/helpers': 0.5.1
   '@swc/jest': 0.2.26_@swc+core@1.3.96
@@ -656,7 +658,6 @@ packages:
 
   /@jridgewell/sourcemap-codec/1.4.15:
     resolution: {integrity: sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==}
-    dev: true
 
   /@jridgewell/trace-mapping/0.3.18:
     resolution: {integrity: sha512-w+niJYzMHdd7USdiH2U6869nqhD2nbfZXND5Yp93qIbEmnDNk7PD48o+YchRVpzMU7M6jVCbenTR7PA1FLQ9pA==}
@@ -671,6 +672,7 @@ packages:
     cpu: [arm]
     os: [android]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@napi-rs/magic-string-android-arm64/0.3.4:
@@ -679,6 +681,7 @@ packages:
     cpu: [arm64]
     os: [android]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@napi-rs/magic-string-darwin-arm64/0.3.4:
@@ -687,6 +690,7 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@napi-rs/magic-string-darwin-x64/0.3.4:
@@ -695,6 +699,7 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@napi-rs/magic-string-freebsd-x64/0.3.4:
@@ -703,6 +708,7 @@ packages:
     cpu: [x64]
     os: [freebsd]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@napi-rs/magic-string-linux-arm-gnueabihf/0.3.4:
@@ -711,6 +717,7 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@napi-rs/magic-string-linux-arm64-gnu/0.3.4:
@@ -719,6 +726,7 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@napi-rs/magic-string-linux-arm64-musl/0.3.4:
@@ -727,6 +735,7 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@napi-rs/magic-string-linux-x64-gnu/0.3.4:
@@ -735,6 +744,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@napi-rs/magic-string-linux-x64-musl/0.3.4:
@@ -743,6 +753,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@napi-rs/magic-string-win32-arm64-msvc/0.3.4:
@@ -751,6 +762,7 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@napi-rs/magic-string-win32-ia32-msvc/0.3.4:
@@ -759,6 +771,7 @@ packages:
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@napi-rs/magic-string-win32-x64-msvc/0.3.4:
@@ -767,6 +780,7 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
+    dev: true
     optional: true
 
   /@napi-rs/magic-string/0.3.4:
@@ -786,6 +800,7 @@ packages:
       '@napi-rs/magic-string-win32-arm64-msvc': 0.3.4
       '@napi-rs/magic-string-win32-ia32-msvc': 0.3.4
       '@napi-rs/magic-string-win32-x64-msvc': 0.3.4
+    dev: true
 
   /@nicolo-ribaudo/semver-v6/6.3.3:
     resolution: {integrity: sha512-3Yc1fUTs69MG/uZbJlLSI3JISMn2UV2rg+1D/vROUqZyh3l6iYHCs7GMp+M40ZD7yOdDbYjJcU1oTJhrc+dGKg==}
@@ -808,6 +823,24 @@ packages:
       is-reference: 1.2.1
       magic-string: 0.27.0
       rollup: 3.20.7
+    dev: true
+
+  /@rollup/plugin-commonjs/25.0.7_rollup@3.28.1:
+    resolution: {integrity: sha512-nEvcR+LRjEjsaSsc4x3XZfCCvZIaSMenZu/OiwOKGN2UhQpAYI7ru7czFvyWbErlpoGjnSX3D5Ch5FcMA3kRWQ==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^2.68.0||^3.0.0||^4.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      '@rollup/pluginutils': 5.0.2_rollup@3.28.1
+      commondir: 1.0.1
+      estree-walker: 2.0.2
+      glob: 8.1.0
+      is-reference: 1.2.1
+      magic-string: 0.30.5
+      rollup: 3.28.1
     dev: true
 
   /@rollup/plugin-json/6.0.0_rollup@3.20.7:
@@ -888,6 +921,21 @@ packages:
       estree-walker: 2.0.2
       picomatch: 2.3.1
       rollup: 3.20.7
+    dev: true
+
+  /@rollup/pluginutils/5.0.2_rollup@3.28.1:
+    resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      '@types/estree': 1.0.1
+      estree-walker: 2.0.2
+      picomatch: 2.3.1
+      rollup: 3.28.1
     dev: true
 
   /@rollup/rollup-android-arm-eabi/4.4.1:
@@ -2398,12 +2446,11 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
 
-  /magic-string/0.30.1:
-    resolution: {integrity: sha512-mbVKXPmS0z0G4XqFDCTllmDQ6coZzn94aMlb0o/A4HEHJCKcanlDZwYJgwnkmgD3jyWhUgj9VsPrfd972yPffA==}
+  /magic-string/0.30.5:
+    resolution: {integrity: sha512-7xlpfBaQaP/T6Vh8MO/EqXSW5En6INHEvEXQiuff7Gku0PWjU3uf6w/j9o7O+SpB5fOAkrI5HeoNgwjEO0pFsA==}
     engines: {node: '>=12'}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
-    dev: true
 
   /make-dir/3.1.0:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
@@ -2675,7 +2722,7 @@ packages:
       rollup: ^3.0.0
       typescript: ^4.1 || ^5.0
     dependencies:
-      magic-string: 0.30.1
+      magic-string: 0.30.5
       rollup: 3.20.7
       typescript: 5.1.6
     optionalDependencies:

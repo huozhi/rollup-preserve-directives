@@ -1,6 +1,6 @@
 import path from 'path';
 import { Module } from 'module';
-import type { rollup } from 'rollup';
+import type { rollup, Plugin as RollupPlugin } from 'rollup';
 
 import { swc } from 'rollup-plugin-swc3';
 import preserveDirective from '../src';
@@ -12,7 +12,8 @@ interface BuildTestOption {
   sourcemap?: boolean,
   dir?: string,
   external?: ExternalOption
-  version?: number
+  version?: number,
+  otherPlugins?: RollupPlugin[]
 }
 
 const DEFAULT_EXTERNAL = ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'].concat(Module.builtinModules);
@@ -25,6 +26,7 @@ export const tester = async (
     dir = path.resolve(__dirname, 'fixtures'),
     external = DEFAULT_EXTERNAL,
     version,
+    otherPlugins = []
   }: BuildTestOption = {}
 ) => {
   const build = await rollupImpl({
@@ -40,7 +42,7 @@ export const tester = async (
         return acc;
       }, {});
     })() as any,
-    plugins: [preserveDirective(), swc()] as any, // rollup 2 & rollup 3 type is incompatible
+    plugins: [...otherPlugins, preserveDirective(), swc()] as any, // rollup 2 & rollup 3 type is incompatible
     external,
     onwarn(warning, warn) {
       if (version === 2) {

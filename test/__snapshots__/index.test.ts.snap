@@ -1,5 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`preserve-directive (rollup 2) fix string constant introduced by rollup commonjs 1`] = `
+{
+  "index": "import require$$0 from 'react';
+
+function getDefaultExportFromCjs (x) {
+	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+}
+
+const { useState } = require$$0;
+var commonjsVirtualModules = function client() {
+    return useState(null);
+};
+var index = /*@__PURE__*/ getDefaultExportFromCjs(commonjsVirtualModules);
+
+export { index as default };
+",
+}
+`;
+
 exports[`preserve-directive (rollup 2) issue #9 1`] = `
 {
   "index": "'use strict';
@@ -119,6 +138,25 @@ console.log('shebang');
 }
 `;
 
+exports[`preserve-directive (rollup 3) fix string constant introduced by rollup commonjs 1`] = `
+{
+  "index": "import require$$0 from 'react';
+
+function getDefaultExportFromCjs (x) {
+	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+}
+
+const { useState } = require$$0;
+var commonjsVirtualModules = function client() {
+    return useState(null);
+};
+var index = /*@__PURE__*/ getDefaultExportFromCjs(commonjsVirtualModules);
+
+export { index as default };
+",
+}
+`;
+
 exports[`preserve-directive (rollup 3) issue #9 1`] = `
 {
   "index": "'use strict';
@@ -234,6 +272,25 @@ exports[`preserve-directive (rollup 3) should preserve shebang 1`] = `
 {
   "index": "#!/usr/bin/env node
 console.log('shebang');
+",
+}
+`;
+
+exports[`preserve-directive (rollup 4) fix string constant introduced by rollup commonjs 1`] = `
+{
+  "index": "import require$$0 from 'react';
+
+function getDefaultExportFromCjs (x) {
+	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+}
+
+const { useState } = require$$0;
+var commonjsVirtualModules = function client() {
+    return useState(null);
+};
+var index = /*@__PURE__*/ getDefaultExportFromCjs(commonjsVirtualModules);
+
+export { index as default };
 ",
 }
 `;
