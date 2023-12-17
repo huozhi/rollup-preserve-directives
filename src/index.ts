@@ -11,7 +11,7 @@ interface PreserveDirectiveMeta {
   directives: Record<string, Set<string>>
 }
 
-function preserveDirective(): Plugin {
+function preserveDirectives(): Plugin {
   const meta: PreserveDirectiveMeta = {
     shebang: null,
     directives: {},
@@ -122,7 +122,13 @@ function preserveDirective(): Plugin {
 
         return {
           code: magicString ? magicString.toString() : code,
-          map: magicString ? magicString.generateMap({ hires: true }) : null
+          map: magicString ? magicString.generateMap({ hires: true }) : null,
+          meta: {
+            preserveDirectives: {
+              directives: Array.from(meta.directives[id] || []),
+              shebang: meta.shebang,
+            }
+          }
         }
       }
     },
@@ -176,5 +182,5 @@ function preserveDirective(): Plugin {
   }
 }
 
-export default preserveDirective;
-export { preserveDirective };
+export default preserveDirectives;
+export const preserveDirective = preserveDirectives;
