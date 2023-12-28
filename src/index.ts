@@ -29,6 +29,9 @@ function preserveDirectives(): Plugin {
 
         const magicString: MagicString = new MagicString(code);
 
+        // MagicString's `hasChanged()` is slow, so we track the change manually
+        let hasChanged = false;
+
         /**
          * Here we are making 3 assumptions:
          * - shebang can only be at the first line of the file, otherwise it will not be recognized
@@ -56,6 +59,7 @@ function preserveDirectives(): Plugin {
             meta.shebang = code.slice(0, firstNewLineIndex);
 
             magicString.remove(0, firstNewLineIndex + 1);
+            hasChanged = true;
           }
         }
 
@@ -64,6 +68,7 @@ function preserveDirectives(): Plugin {
          */
         let ast: null | Node = null;
         try {
+          // rollup 2 built-in parser doesn't have `allowShebang`, we need to use the sliced code here. Hence the `magicString.toString()`
           ast = this.parse(magicString.toString(), { allowReturnOutsideFunction: true, allowShebang: true }) as Node;
         } catch (e) {
           this.warn({
@@ -116,13 +121,19 @@ function preserveDirectives(): Plugin {
               && typeof node.end === 'number'
             ) {
               magicString.remove(node.start, node.end);
+              hasChanged = true;
             }
           }
         }
 
+        if (!hasChanged) {
+          // If nothing has changed, we can avoid the expensive `toString()` and `generateMap()` calls
+          return null;
+        }
+
         return {
-          code: magicString ? magicString.toString() : code,
-          map: magicString ? magicString.generateMap({ hires: true }) : null,
+          code: magicString.toString(),
+          map: magicString.generateMap({ hires: true }),
           meta: {
             preserveDirectives: {
               directives: Array.from(meta.directives[id] || []),
@@ -167,9 +178,14 @@ function preserveDirectives(): Plugin {
         magicString.prepend(`${meta.shebang}\n`)
       }
 
+      // Neither outputDirectives nor meta.shebang is present, no change is needed
+      if (!magicString) {
+        return null
+      }
+
       return {
-        code: magicString ? magicString.toString() : code,
-        map: (sourcemap && magicString) ? magicString.generateMap({ hires: true }) : null
+        code: magicString.toString(),
+        map: sourcemap ? magicString.generateMap({ hires: true }) : null
       }
     },
 
