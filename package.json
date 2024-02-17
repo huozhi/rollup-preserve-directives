@@ -2,6 +2,10 @@
   "name": "rollup-preserve-directives",
   "version": "1.1.1",
   "description": "Rollup plugin to preserve directives",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/huozhi/rollup-preserve-directives"
+  },
   "types": "./dist/cjs/index.d.ts",
   "main": "./dist/cjs/index.js",
   "module": "./dist/es/index.mjs",
