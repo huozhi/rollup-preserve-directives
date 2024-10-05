@@ -42,6 +42,18 @@ const runTests = (rollupImpl: typeof rollup3, version: number) => {
     expect(output).toMatchSnapshot();
   });
 
+  it('should not output shebang to other entry chunks', async () => {
+    const output = await tester(rollupImpl, {
+      input: {
+        client: 'multi-entries/client.js',
+        server: 'multi-entries/server.js',
+        cli: 'multi-entries/cli.js',
+      }
+    });
+
+    expect(output).toMatchSnapshot();
+  })
+
   it('issue #9', async () => {
     const output = await tester(rollupImpl, {
       input: 'prop-types/index.js'

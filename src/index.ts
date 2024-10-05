@@ -7,13 +7,14 @@ const availableESExtensionsRegex = /\.(m|c)?(j|t)sx?$/
 const directiveRegex = /^use (\w+)$/
 
 interface PreserveDirectiveMeta {
-  shebang: string | null,
+  // shebang map: facadeModuleId (origin entry ids), value is the shebang string
+  shebangs: Map<string, string>
   directives: Record<string, Set<string>>
 }
 
 function preserveDirectives(): Plugin {
   const meta: PreserveDirectiveMeta = {
-    shebang: null,
+    shebangs: new Map<string, string>(),
     directives: {},
   }
 
@@ -56,7 +57,10 @@ function preserveDirectives(): Plugin {
           }
 
           if (firstNewLineIndex) {
-            meta.shebang = code.slice(0, firstNewLineIndex);
+            meta.shebangs.set(
+              id,
+              code.slice(0, firstNewLineIndex)
+            )
 
             magicString.remove(0, firstNewLineIndex + 1);
             hasChanged = true;
@@ -131,19 +135,25 @@ function preserveDirectives(): Plugin {
           return null;
         }
 
+        const metaState: {
+          preserveDirectives: {
+            directives: string[],
+            shebang: string | null
+          }
+        } = {
+          preserveDirectives: {
+            directives: Array.from(meta.directives[id] || []),
+            shebang: meta.shebangs.get(id) || null,
+          }
+        }        
+
         return {
           code: magicString.toString(),
           map: magicString.generateMap({ hires: true }),
-          meta: {
-            preserveDirectives: {
-              directives: Array.from(meta.directives[id] || []),
-              shebang: meta.shebang,
-            }
-          }
+          meta: metaState
         }
       }
     },
-
     renderChunk(code, chunk, { sourcemap }) {
       /**
        * chunk.moduleIds is introduced in rollup 3
@@ -173,9 +183,14 @@ function preserveDirectives(): Plugin {
         magicString ||= new MagicString(code)
         magicString.prepend(`${Array.from(outputDirectives).map(directive => `'${directive}';`).join('\n')}\n`)
       }
-      if (meta.shebang) {
+      // determine if any of the modules have a shebang
+      // if so, prepend it to the output
+      const shebang = chunk.facadeModuleId
+        ? meta.shebangs.get(chunk.facadeModuleId) || null
+        : null
+      if (shebang) {
         magicString ||= new MagicString(code)
-        magicString.prepend(`${meta.shebang}\n`)
+        magicString.prepend(`${shebang}\n`)
       }
 
       // Neither outputDirectives nor meta.shebang is present, no change is needed
