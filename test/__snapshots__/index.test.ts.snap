@@ -88,6 +88,30 @@ export { bar, baz, foo };
 }
 `;
 
+exports[`preserve-directive (rollup 2) should not output shebang to other entry chunks 1`] = `
+{
+  "cli": "#!/usr/bin/env node
+console.log('index');
+",
+  "client": "'use client';
+const foo = 'foo';
+
+function client() {
+    return 'client' + foo;
+}
+
+export { client };
+",
+  "server": "'use server';
+function server() {
+    return 'server';
+}
+
+export { server };
+",
+}
+`;
+
 exports[`preserve-directive (rollup 2) should output separate directive for multiple output chunk 1`] = `
 {
   "client": "'use client';
@@ -226,6 +250,30 @@ export { bar, baz, foo };
 }
 `;
 
+exports[`preserve-directive (rollup 3) should not output shebang to other entry chunks 1`] = `
+{
+  "cli": "#!/usr/bin/env node
+console.log('index');
+",
+  "client": "'use client';
+const foo = 'foo';
+
+function client() {
+    return 'client' + foo;
+}
+
+export { client };
+",
+  "server": "'use server';
+function server() {
+    return 'server';
+}
+
+export { server };
+",
+}
+`;
+
 exports[`preserve-directive (rollup 3) should output separate directive for multiple output chunk 1`] = `
 {
   "client": "'use client';
@@ -360,6 +408,30 @@ const bar = 'bar';
 const baz = 'baz';
 
 export { bar, baz, foo };
+",
+}
+`;
+
+exports[`preserve-directive (rollup 4) should not output shebang to other entry chunks 1`] = `
+{
+  "cli": "#!/usr/bin/env node
+console.log('index');
+",
+  "client": "'use client';
+const foo = 'foo';
+
+function client() {
+    return 'client' + foo;
+}
+
+export { client };
+",
+  "server": "'use server';
+function server() {
+    return 'server';
+}
+
+export { server };
 ",
 }
 `;
