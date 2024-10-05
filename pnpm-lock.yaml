@@ -9,7 +9,7 @@ specifiers:
   '@types/jest': ^29.5.2
   '@types/node': ^20.4.1
   acorn: ^8.10.0
-  bunchee: ^4.2.7
+  bunchee: ^4.2.6
   jest: ^29.6.1
   magic-string: ^0.30.5
   rollup: ^3.28.1
@@ -30,7 +30,7 @@ devDependencies:
   '@types/jest': 29.5.2
   '@types/node': 20.4.1
   acorn: 8.10.0
-  bunchee: 4.2.7_typescript@5.1.6
+  bunchee: 4.2.6_typescript@5.1.6
   jest: 29.6.1_@types+node@20.4.1
   rollup: 3.28.1
   rollup-plugin-swc3: 0.11.0_4dg5ewbtivth5d4umte3zzhlei
@@ -1518,8 +1518,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /bunchee/4.2.7_typescript@5.1.6:
-    resolution: {integrity: sha512-W+8Ps5rxjk+kIeJHN4yME4eP/2jJVqTrhqEagnjo77Y+Uf3PbJ0V4IQXaqDcagI+U86O5NidOL7FgYsPZcpmwQ==}
+  /bunchee/4.2.6_typescript@5.1.6:
+    resolution: {integrity: sha512-Gcid8dqk3U6h3mVzjgs+hHKmnVpmGD/bEO2TKgUB9gmdMUFgEU8js427kPvEuV11vl09H/qyuSsNWA6G8IL/+Q==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
     peerDependencies:
@@ -1545,7 +1545,7 @@ packages:
       rollup: 4.9.1
       rollup-plugin-dts: 6.1.0_drrnmeyyeudlo54djz2u35j3pu
       rollup-plugin-swc3: 0.11.0_n3oixvphhuchm6vc4ecnjsqftu
-      rollup-preserve-directives: 1.1.1_rollup@4.9.1
+      rollup-preserve-directives: 1.1.0_rollup@4.9.1
       tslib: 2.6.2
       typescript: 5.1.6
     dev: true
@@ -2821,15 +2821,6 @@ packages:
 
   /rollup-preserve-directives/1.1.0_rollup@4.9.1:
     resolution: {integrity: sha512-LL8yNGqtOrSL104TlTX12Ih5wgLHRFL/V2TY9DjGW0EKER5KQcLuYh3iL5T4L/YPP9TR4pvyh+imA+OetYNcyA==}
-    peerDependencies:
-      rollup: ^2.0.0 || ^3.0.0 || ^4.0.0
-    dependencies:
-      magic-string: 0.30.5
-      rollup: 4.9.1
-    dev: true
-
-  /rollup-preserve-directives/1.1.1_rollup@4.9.1:
-    resolution: {integrity: sha512-+eQafbuEfDPfxQ9hQPlwaROfin4yiVRxap8hnrvvvcSGoukv1tTiYpAW9mvm3uR8J+fe4xd8FdVd5rz9q7jZ+Q==}
     peerDependencies:
       rollup: ^2.0.0 || ^3.0.0 || ^4.0.0
     dependencies:

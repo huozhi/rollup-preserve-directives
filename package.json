@@ -14,7 +14,6 @@
       "types": "./dist/es/index.d.mts",
       "default": "./dist/es/index.mjs"
     },
-    "types": "./dist/cjs/index.d.ts",
     "default": "./dist/cjs/index.js"
   },
   "files": [
@@ -49,7 +48,7 @@
     "@types/jest": "^29.5.2",
     "@types/node": "^20.4.1",
     "acorn": "^8.10.0",
-    "bunchee": "^4.2.7",
+    "bunchee": "^4.2.6",
     "jest": "^29.6.1",
     "rollup": "^3.28.1",
     "rollup-plugin-swc3": "^0.11.0",
