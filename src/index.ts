@@ -72,8 +72,13 @@ function preserveDirectives(): Plugin {
          */
         let ast: null | Node = null;
         try {
-          // rollup 2 built-in parser doesn't have `allowShebang`, we need to use the sliced code here. Hence the `magicString.toString()`
-          ast = this.parse(magicString.toString(), { allowReturnOutsideFunction: true, allowShebang: true }) as Node;
+          
+          ast = this.parse(magicString.toString(), {
+            allowReturnOutsideFunction: true,
+            // @ts-expect-error
+            // rollup 2 built-in parser doesn't have `allowShebang`, we need to use the sliced code here. Hence the `magicString.toString()`
+            allowShebang: true
+          }) as Node;
         } catch (e) {
           this.warn({
             code: 'PARSE_ERROR',

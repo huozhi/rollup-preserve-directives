@@ -1,11 +1,9 @@
 import { tester } from './testing-utils';
-import { rollup as rollup3 } from 'rollup';
-import { rollup as rollup2 } from 'rollup2';
-import { rollup as rollup4 } from 'rollup4';
+import { rollup } from 'rollup';
 
 import rollupPluginCommonjs from '@rollup/plugin-commonjs';
 
-const runTests = (rollupImpl: typeof rollup3, version: number) => {
+export const runTests = (rollupImpl: typeof rollup, version: number) => {
   it('should preserve shebang', async () => {
     const output = await tester(rollupImpl, {
       input: 'shebang/index.ts',
@@ -72,17 +70,6 @@ const runTests = (rollupImpl: typeof rollup3, version: number) => {
   });
 }
 
-describe('preserve-directive (rollup 2)', () => {
-  // @ts-expect-error -- rollup 2 type is incompatible w/ rollup 3
-  runTests(rollup2, 2);
-});
-
-
-describe('preserve-directive (rollup 3)', () => {
-  runTests(rollup3, 3);
-});
-
 describe('preserve-directive (rollup 4)', () => {
-  // @ts-expect-error -- rollup 4 type is incompatible w/ rollup 3
-  runTests(rollup4, 4);
+  runTests(rollup, 4);
 });
