@@ -85,8 +85,6 @@ function preserveDirectives(): Plugin {
             message: `[rollup-preserve-directives]: failed to parse "${id}" and extract the directives. make sure you have added "rollup-preserve-directives" to the last of your plugins list, after swc/babel/esbuild/typescript or any other transform plugins.`
           });
 
-          console.warn(e);
-
           return null;
         }
 
