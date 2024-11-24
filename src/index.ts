@@ -218,3 +218,4 @@ function preserveDirectives(): Plugin {
 
 export default preserveDirectives;
 export const preserveDirective = preserveDirectives;
+export { type PreserveDirectiveMeta }
