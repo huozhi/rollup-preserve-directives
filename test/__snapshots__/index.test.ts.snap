@@ -161,3 +161,15 @@ console.log('shebang');
 ",
 }
 `;
+
+exports[`preserve-directive (rollup 4) should support complex directive like \`use abc:type\` 1`] = `
+{
+  "index": "'use abc:type';
+function foo() {
+    return 'foo';
+}
+
+export { foo };
+",
+}
+`;

@@ -162,6 +162,18 @@ console.log('shebang');
 }
 `;
 
+exports[`preserve-directive (rollup 2) should support complex directive like \`use abc:type\` 1`] = `
+{
+  "index": "'use abc:type';
+function foo() {
+    return 'foo';
+}
+
+export { foo };
+",
+}
+`;
+
 exports[`preserve-directive (rollup 4) fix string constant introduced by rollup commonjs 1`] = `
 {
   "index": "import require$$0 from 'react';
@@ -320,6 +332,18 @@ exports[`preserve-directive (rollup 4) should preserve shebang 1`] = `
 {
   "index": "#!/usr/bin/env node
 console.log('shebang');
+",
+}
+`;
+
+exports[`preserve-directive (rollup 4) should support complex directive like \`use abc:type\` 1`] = `
+{
+  "index": "'use abc:type';
+function foo() {
+    return 'foo';
+}
+
+export { foo };
 ",
 }
 `;

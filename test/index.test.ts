@@ -68,6 +68,13 @@ export const runTests = (rollupImpl: typeof rollup, version: number) => {
 
     expect(output).toMatchSnapshot();
   });
+
+  it('should support complex directive like `use abc:type`', async () => {
+    const output = await tester(rollupImpl, {
+      input: 'complex-directive/index.js'
+    });
+    expect(output).toMatchSnapshot();
+  })
 }
 
 describe('preserve-directive (rollup 4)', () => {
